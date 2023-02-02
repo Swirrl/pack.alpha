@@ -22,6 +22,9 @@
     :volumes - optional, a set of file path strings that may hold
                externally mounted volumes.
 
+    :platforms - optional, a set of keywords of the form :<os>/<architecture>
+                 e.g. #{:linux/amd64 :linux/arm64}
+
     :environment - optional, a map of environment variables (strings) to their
                    values (strings)
 

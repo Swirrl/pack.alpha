@@ -3,7 +3,8 @@
             [juxt.pack.impl.elodin :as elodin]
             [clojure.string :as str])
   (:import (com.google.cloud.tools.jib.api Jib)
-           (com.google.cloud.tools.jib.api.buildplan AbsoluteUnixPath ModificationTimeProvider FileEntriesLayer)
+           (com.google.cloud.tools.jib.api.buildplan
+             AbsoluteUnixPath ModificationTimeProvider FileEntriesLayer Platform)
            (java.nio.file Paths Files LinkOption FileSystems)
            (com.google.cloud.tools.jib.api Containerizer
                                            DockerDaemonImage
@@ -170,6 +171,7 @@
            tags
 
            volumes
+           platforms
 
            creation-time
            user]
@@ -209,6 +211,9 @@
                                      (:classpath-roots basis))))
                                "clojure.main"]
                               (-> basis :classpath-args :main-opts))))
+        (cond-> platforms
+          (.setPlatforms
+           (into #{} (map #(Platform. (name %) (namespace %)) platforms))))
         (.containerize
           (add-additional-tags
             (make-containerizer
